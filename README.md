@@ -2,14 +2,6 @@ Spring Boot Starter Akka
 ========================
 Spring Boot 2.0 starter for Akka.
 
-### Why Spring Boot starter for nats
-NATS is very simple, why you create a starter?
-
-* Settings easy: just nats.url
-* Spring Kafka like: @NatsSubscriber
-* Metrics & endpoints: NATS states
-* Health indicator for NATS
-
 ### How to use
 
 * please add following dependency in your pom.xml
