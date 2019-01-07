@@ -55,5 +55,6 @@ public class PortalController extends AkkaSpringSupport {
 ### References
 
 * Akka Quickstart with Java: https://developer.lightbend.com/guides/akka-quickstart-java/index.html
+* Akka Chinese document: https://doc.yonyoucloud.com/doc/akka-doc-cn/2.3.6/scala/book/chapter1/01_what_is_akka.html
 * Introduction to Spring with Akka: https://www.baeldung.com/akka-with-spring
 
