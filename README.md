@@ -52,6 +52,16 @@ public class PortalController extends AkkaSpringSupport {
     }
 }
 ```
+
+### FAQ
+
+#####  How to set Akka configuration?
+Please add following setting in your application.properties
+
+```
+akka.conf=classpath:/akka.conf
+```
+
 ### References
 
 * Akka Quickstart with Java: https://developer.lightbend.com/guides/akka-quickstart-java/index.html
