@@ -53,13 +53,40 @@ public class PortalController extends AkkaSpringSupport {
 }
 ```
 
+### Akka configuration
+
+Configuration in application.properties will replace settings in Akka configuration file.
+
+* Akka Actor
+```properties
+akka.actor-provider=local
+```
+
+* Akka Remote
+```properties
+akka.actor-provider=remote
+akka.listen-port=2552
+```
+
+* Akka Cluster
+```
+akka.actor-provider=cluster
+akka.listen-port=0
+akka.cluster-seed-nodes=akka.tcp://ClusterSystem@127.0.0.1:2551,akka.tcp://ClusterSystem@127.0.0.1:2552
+akka.extensions=akka.cluster.client.ClusterClientReceptionist
+```
+* Akka configuration file
+```
+akka.conf=classpath:/application.hocon
+```
+
 ### FAQ
 
 #####  How to set Akka configuration?
 Please add following setting in your application.properties
 
 ```
-akka.conf=classpath:/akka.conf
+akka.conf=classpath:/application.conf
 ```
 
 ### References
