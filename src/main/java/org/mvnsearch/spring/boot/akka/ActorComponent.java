@@ -1,7 +1,6 @@
 package org.mvnsearch.spring.boot.akka;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +19,12 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActorComponent {
+
+    /**
+     * register actor on cluster or not
+     * ClusterClientReceptionist.get(actorSystem).registerService(ref);
+     *
+     * @return registered indication
+     */
+    boolean registered() default false;
 }
