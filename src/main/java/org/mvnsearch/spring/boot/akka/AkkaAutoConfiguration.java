@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Akka auto configuration for Spring
  *
@@ -37,10 +41,41 @@ public class AkkaAutoConfiguration implements ApplicationContextAware {
         if (conf == null) {
             system = ActorSystem.create(actorSystemName);
         } else {
-            Config config = ConfigFactory.parseURL(akkaProperties.getConf().getURL());
-            system = ActorSystem.create(actorSystemName, config);
+            system = ActorSystem.create(actorSystemName, combinedConfig());
         }
         SpringAkkaExtension.SPRING_EXTENSION_PROVIDER.get(system).initialize(applicationContext);
         return system;
+    }
+
+    /**
+     * combine config from config file & settings
+     *
+     * @return AKKA config
+     * @throws Exception exception
+     */
+    private Config combinedConfig() throws Exception {
+        List<String> configItems = new ArrayList<>();
+        if (akkaProperties.getActorProvider() != null) {
+            configItems.add("akka.actor.provider=\"" + akkaProperties.getActorProvider() + "\"");
+            if (!akkaProperties.getActorProvider().equals("local")) {
+                configItems.add("akka.remote.netty.tcp.port=" + akkaProperties.getListenPort());
+            }
+        }
+        if (akkaProperties.getClusterSeedNodes() != null && !akkaProperties.getClusterSeedNodes().isEmpty()) {
+            configItems.add("akka.cluster.seed-nodes=" + akkaProperties.getClusterSeedNodes().stream()
+                    .map(s -> "\"" + s + "\"")
+                    .collect(Collectors.joining(",", "[", "]")));
+        }
+        if (akkaProperties.getExtensions() != null && !akkaProperties.getExtensions().isEmpty()) {
+            configItems.add("akka.extensions=" + akkaProperties.getExtensions().stream()
+                    .map(s -> "\"" + s + "\"")
+                    .collect(Collectors.joining(",", "[", "]")));
+        }
+        Config appConfig = ConfigFactory.parseString(String.join("\r", configItems));
+        if (akkaProperties.getConf() != null) {
+            Config regularConfig = ConfigFactory.parseURL(akkaProperties.getConf().getURL());
+            appConfig = appConfig.withFallback(regularConfig);
+        }
+        return appConfig;
     }
 }
